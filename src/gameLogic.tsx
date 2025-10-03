@@ -1,6 +1,6 @@
 const icons = ["⚜️", "🎁", "🔔", "❤️", "♠️"];
 
-function shuffleIcons() {
+export function shuffleIcons(): string[] {
   let curIndex = icons.length;
   let shuffledArr = icons;
 
@@ -12,7 +12,18 @@ function shuffleIcons() {
       shuffledArr[randIndex],
       shuffledArr[curIndex],
     ];
-
     return shuffledArr;
   }
+  return ["❓"];
 }
+
+export function getRandomIcon() {
+  const shuffledArr = shuffleIcons();
+  if (shuffledArr) {
+    return shuffledArr[Math.floor(Math.random() * shuffledArr.length)];
+  } else {
+    return "❓";
+  }
+}
+
+function checkMatch() {}

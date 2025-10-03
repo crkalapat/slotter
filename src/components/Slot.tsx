@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import "../css/App.css";
+import Icon from "./Icon.tsx";
 
 function Slot() {
   return (
@@ -11,11 +11,15 @@ function Slot() {
           animate={{ transform: "translateY(100px)" }}
           transition={{ duration: 1 }}
         >
-          <p className="mt-2.5 mb-2.5">⚜️</p>
-          <p className="mt-2.5 mb-2.5">🎁</p>
-          <p className="mt-2.5 mb-2.5">🔔</p>
-          <p className="mt-2.5 mb-2.5">❤️</p>
-          <p className="mt-2.5 mb-2.5">♠️</p>
+          <Icon />
+          <Icon />
+          <Icon />
+          <Icon />
+          <Icon />
+          <Icon />
+          <Icon />
+          <Icon />
+          <Icon />
         </motion.div>
       </div>
     </>
