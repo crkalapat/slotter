@@ -9,7 +9,7 @@ type IconData = {
 };
 
 function Slot() {
-  const maxIconLength = 9;
+  const maxIconLength = 4;
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [icons, setIcons] = useState<IconData[]>(
@@ -28,45 +28,105 @@ function Slot() {
   }
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        setIcons((prevIcons) => {
-          const updated = [...prevIcons];
-          const updatedRefs = [...iconRefs.current];
+    // const observer = new IntersectionObserver(
+    //   (entries) => {
+    //     setIcons((prevIcons) => {
+    //       const updatedIcons = [...prevIcons];
+    //       const updatedRefs = [...iconRefs.current];
 
-          entries.forEach((entry) => {
-            const index = iconRefs.current.findIndex(
-              (el) => el === entry.target
-            );
-            if (index !== -1 && !entry.isIntersecting) {
-              updated.splice(index, 1);
-              updatedRefs.splice(index, 1);
+    //       entries.forEach((entry) => {
+    //         const index = iconRefs.current.findIndex(
+    //           (el) => el === entry.target
+    //         );
+    //         if (
+    //           index !== -1 &&
+    //           !entry.isIntersecting &&
+    //           index == maxIconLength - 1
+    //         ) {
+    //           for (let i = 0; i < maxIconLength; i++) {
+    //             console.log(updatedIcons[i].icon + " ");
+    //           }
+    //           updatedIcons[0] = prevIcons[maxIconLength - 1];
+    //           for (let i = 0; i < maxIconLength - 1; i++) {
+    //             updatedIcons[i + 1] = prevIcons[i];
+    //           }
+    //           console.log(
+    //             "Move " +
+    //               prevIcons[maxIconLength - 1].icon +
+    //               " ID: " +
+    //               prevIcons[maxIconLength - 1].id
+    //           );
+    //           for (let i = 0; i < maxIconLength; i++) {
+    //             console.log(updatedIcons[i].icon + " ");
+    //           }
+    //           console.log("-------------------");
+    //         }
+    //       });
+
+    //       iconRefs.current = updatedRefs;
+    //       return updatedIcons;
+    //     });
+    //   },
+    //   {
+    //     root: containerRef.current,
+    //     threshold: 1.0,
+    //   }
+    // );
+
+    // iconRefs.current.forEach((el) => {
+    //   // if (el) {
+    //   //   observer.observe(el);
+    //   // }
+    // });
+
+    const checkVisibility = () => {
+      if (Array.isArray(iconRefs.current)) {
+        iconRefs.current.forEach(({ iconRef, i }: any) => {
+          const containerBottom =
+            containerRef.current?.getBoundingClientRect().bottom;
+          const iconTop = iconRef?.getBoundingClientRect().top;
+
+          if (iconTop && containerBottom) {
+            if (iconTop > containerBottom && i == maxIconLength - 1) {
+              setIcons((prevIcons) => {
+                let updatedIcons = [...prevIcons];
+                for (let i = 0; i < maxIconLength; i++) {
+                  console.log(updatedIcons[i].icon + " ");
+                }
+                updatedIcons[0] = prevIcons[maxIconLength - 1];
+                for (let i = 0; i < maxIconLength - 1; i++) {
+                  updatedIcons[i + 1] = prevIcons[i];
+                }
+                console.log(
+                  "Move " +
+                    prevIcons[maxIconLength - 1].icon +
+                    " ID: " +
+                    prevIcons[maxIconLength - 1].id
+                );
+                for (let i = 0; i < maxIconLength; i++) {
+                  console.log(updatedIcons[i].icon + " ");
+                }
+                console.log("-------------------");
+                return updatedIcons;
+              });
             }
-          });
-
-          iconRefs.current = updatedRefs;
-          return updated;
+          } else {
+            if (!iconTop) {
+              console.log("iconTop couldn't be used");
+            } else {
+              console.log("containerBottom couldn't be used");
+            }
+          }
         });
-      },
-      {
-        root: containerRef.current,
-        threshold: 0.0,
+      } else {
+        console.log("IconRefs is not an array, cannot do ForEach loop on it!");
       }
-    );
+    };
 
-    iconRefs.current.forEach((el) => {
-      if (el) {
-        observer.observe(el);
-      }
-    });
+    const interval = setInterval(checkVisibility, 100);
 
     return () => {
-      iconRefs.current.forEach((el) => {
-        if (el) {
-          observer.unobserve(el);
-        }
-      });
-      observer.disconnect();
+      clearInterval(interval);
     };
   }, []);
 
