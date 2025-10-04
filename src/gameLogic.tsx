@@ -25,5 +25,3 @@ export function getRandomIcon() {
     return "❓";
   }
 }
-
-function checkMatch() {}

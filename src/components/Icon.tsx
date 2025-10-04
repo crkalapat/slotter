@@ -1,11 +1,10 @@
 import "../css/App.css";
-import { getRandomIcon } from "../gameLogic.tsx";
 
-function Icon({ id }: any) {
+function Icon({ id, ref, icon }: any) {
   return (
     <>
-      <p key={id} className="mt-2.5 mb-2.5">
-        {getRandomIcon()}
+      <p ref={ref} key={id} className="mt-2.5 mb-2.5">
+        {icon}
       </p>
     </>
   );
