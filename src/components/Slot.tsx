@@ -28,60 +28,9 @@ function Slot() {
   }
 
   useEffect(() => {
-    // const observer = new IntersectionObserver(
-    //   (entries) => {
-    //     setIcons((prevIcons) => {
-    //       const updatedIcons = [...prevIcons];
-    //       const updatedRefs = [...iconRefs.current];
-
-    //       entries.forEach((entry) => {
-    //         const index = iconRefs.current.findIndex(
-    //           (el) => el === entry.target
-    //         );
-    //         if (
-    //           index !== -1 &&
-    //           !entry.isIntersecting &&
-    //           index == maxIconLength - 1
-    //         ) {
-    //           for (let i = 0; i < maxIconLength; i++) {
-    //             console.log(updatedIcons[i].icon + " ");
-    //           }
-    //           updatedIcons[0] = prevIcons[maxIconLength - 1];
-    //           for (let i = 0; i < maxIconLength - 1; i++) {
-    //             updatedIcons[i + 1] = prevIcons[i];
-    //           }
-    //           console.log(
-    //             "Move " +
-    //               prevIcons[maxIconLength - 1].icon +
-    //               " ID: " +
-    //               prevIcons[maxIconLength - 1].id
-    //           );
-    //           for (let i = 0; i < maxIconLength; i++) {
-    //             console.log(updatedIcons[i].icon + " ");
-    //           }
-    //           console.log("-------------------");
-    //         }
-    //       });
-
-    //       iconRefs.current = updatedRefs;
-    //       return updatedIcons;
-    //     });
-    //   },
-    //   {
-    //     root: containerRef.current,
-    //     threshold: 1.0,
-    //   }
-    // );
-
-    // iconRefs.current.forEach((el) => {
-    //   // if (el) {
-    //   //   observer.observe(el);
-    //   // }
-    // });
-
     const checkVisibility = () => {
       if (Array.isArray(iconRefs.current)) {
-        iconRefs.current.forEach(({ iconRef, i }: any) => {
+        iconRefs.current.forEach((iconRef, i) => {
           const containerBottom =
             containerRef.current?.getBoundingClientRect().bottom;
           const iconTop = iconRef?.getBoundingClientRect().top;
@@ -123,7 +72,7 @@ function Slot() {
       }
     };
 
-    const interval = setInterval(checkVisibility, 100);
+    const interval = setInterval(checkVisibility, 500);
 
     return () => {
       clearInterval(interval);
@@ -139,8 +88,8 @@ function Slot() {
         <motion.div
           className="rounded-sm text-6xl h-100 text-center flex flex-col mt-[-130px] justify-center items-center select-none"
           initial={{ transform: 0 }}
-          animate={{ transform: "translateY(100px)" }}
-          transition={{ duration: 20 }}
+          animate={{ transform: "translateY(50px)" }}
+          transition={{ duration: 5 }}
         >
           {icons.map((iconEl, i) => (
             <Icon
