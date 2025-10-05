@@ -1,5 +1,5 @@
-import { motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, animate } from "motion/react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import Icon from "./Icon.tsx";
 import { getRandomIcon } from "../gameLogic.tsx";
 
@@ -8,100 +8,66 @@ type IconData = {
   icon: string;
 };
 
-function Slot() {
+export type SlotRef = {
+  spin: () => void;
+};
+
+const Slot = forwardRef<SlotRef>((_, ref) => {
+  let currentIDIndex = 0;
   const maxIconLength = 4;
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const iconHeight = 70;
+
+  const y = useMotionValue(0);
+  const isSpinning = useRef(false);
 
   const [icons, setIcons] = useState<IconData[]>(
-    Array.from({ length: maxIconLength }, (_, i) => {
-      return {
-        id: i,
-        icon: getRandomIcon(),
-      };
-    })
+    Array.from({ length: maxIconLength }, () => ({
+      id: currentIDIndex++,
+      icon: getRandomIcon(),
+    }))
   );
 
-  let iconRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+  const spin = async () => {
+    if (isSpinning.current) {
+      return;
+    }
+    isSpinning.current = true;
 
-  if (iconRefs.current.length !== maxIconLength) {
-    iconRefs.current = Array(maxIconLength).fill(null);
-  }
+    for (let i = 0; i < 40; i++) {
+      await animate(y, iconHeight, {
+        duration: 0.08,
+        ease: "linear",
+      });
+      y.set(0);
 
-  useEffect(() => {
-    const checkVisibility = () => {
-      if (Array.isArray(iconRefs.current)) {
-        iconRefs.current.forEach((iconRef, i) => {
-          const containerBottom =
-            containerRef.current?.getBoundingClientRect().bottom;
-          const iconTop = iconRef?.getBoundingClientRect().top;
+      setIcons((prev) => {
+        const newIcon = {
+          id: currentIDIndex++,
+          icon: getRandomIcon(),
+        };
+        return [newIcon, ...prev.slice(0, prev.length - 1)];
+      });
+    }
 
-          if (iconTop && containerBottom) {
-            if (iconTop > containerBottom && i == maxIconLength - 1) {
-              setIcons((prevIcons) => {
-                let updatedIcons = [...prevIcons];
-                for (let i = 0; i < maxIconLength; i++) {
-                  console.log(updatedIcons[i].icon + " ");
-                }
-                updatedIcons[0] = prevIcons[maxIconLength - 1];
-                for (let i = 0; i < maxIconLength - 1; i++) {
-                  updatedIcons[i + 1] = prevIcons[i];
-                }
-                console.log(
-                  "Move " +
-                    prevIcons[maxIconLength - 1].icon +
-                    " ID: " +
-                    prevIcons[maxIconLength - 1].id
-                );
-                for (let i = 0; i < maxIconLength; i++) {
-                  console.log(updatedIcons[i].icon + " ");
-                }
-                console.log("-------------------");
-                return updatedIcons;
-              });
-            }
-          } else {
-            if (!iconTop) {
-              console.log("iconTop couldn't be used");
-            } else {
-              console.log("containerBottom couldn't be used");
-            }
-          }
-        });
-      } else {
-        console.log("IconRefs is not an array, cannot do ForEach loop on it!");
-      }
-    };
+    isSpinning.current = false;
+  };
 
-    const interval = setInterval(checkVisibility, 500);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  useImperativeHandle(ref, () => ({
+    spin,
+  }));
 
   return (
-    <>
-      <div
-        ref={containerRef}
-        className="leading-0 inset-shadow-[0_0px_10px_rgba(0,0,0,0.4)] relative z-10 w-20 h-40 bg-yellow-50 rounded-xl overflow-hidden"
+    <div className="w-20 h-40 bg-yellow-50 rounded-xl overflow-hidden">
+      <motion.div
+        className="text-6xl flex flex-col mt-[-130px] items-center select-none translate-y-2"
+        style={{ y }}
       >
-        <motion.div
-          className="rounded-sm text-6xl h-100 text-center flex flex-col mt-[-130px] justify-center items-center select-none"
-          initial={{ transform: 0 }}
-          animate={{ transform: "translateY(50px)" }}
-          transition={{ duration: 5 }}
-        >
-          {icons.map((iconEl, i) => (
-            <Icon
-              ref={(el: any) => (iconRefs.current[i] = el)}
-              key={iconEl.id}
-              icon={iconEl.icon}
-            />
-          ))}
-        </motion.div>
-      </div>
-    </>
+        {icons.map((icon) => (
+          <Icon key={icon.id} icon={icon.icon} />
+        ))}
+      </motion.div>
+    </div>
   );
-}
+});
 
 export default Slot;

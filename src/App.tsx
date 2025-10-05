@@ -1,8 +1,16 @@
 import { motion } from "motion/react";
+import { useRef } from "react";
 import "./css/App.css";
 import Slot from "./components/Slot.tsx";
+import type { SlotRef } from "./components/Slot.tsx";
 
-function App() {
+const App = () => {
+  const slotRefs = Array.from({ length: 5 }, () => useRef<SlotRef>(null));
+
+  const spin = () => {
+    slotRefs.forEach((ref) => ref.current?.spin());
+  };
+
   return (
     <>
       <main className="p-10">
@@ -14,11 +22,9 @@ function App() {
             <div className="flex flex-row">
               <div className="mt-15">
                 <div className="z-10 w-130 h-50 bg-red-500 rounded-2xl flex flex-row items-center justify-evenly float-left">
-                  <Slot />
-                  <Slot />
-                  <Slot />
-                  <Slot />
-                  <Slot />
+                  {slotRefs.map((ref, index) => (
+                    <Slot key={index} ref={ref} />
+                  ))}
                 </div>
               </div>
             </div>
@@ -27,6 +33,7 @@ function App() {
                 className="rounded-full bg-red-800 p-3 w-20 hover:bg-red-900 mt-15 text-white"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={spin}
               >
                 Spin
               </motion.button>
@@ -36,6 +43,6 @@ function App() {
       </main>
     </>
   );
-}
+};
 
 export default App;
