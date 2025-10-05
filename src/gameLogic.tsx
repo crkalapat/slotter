@@ -33,7 +33,6 @@ export function spendCoins() {
 }
 
 export function win(numMatch: number) {
-  console.log("win called");
   if (numMatch === 0 || numMatch === 1) {
     return;
   }
@@ -52,6 +51,4 @@ export function win(numMatch: number) {
       numCoins += 2000;
       break;
   }
-  console.log(numMatch);
-  console.log(numCoins);
 }

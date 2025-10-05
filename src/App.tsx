@@ -21,8 +21,6 @@ const App = () => {
     ) {
       numMatched = 1 + checkMatches(index + 1);
     }
-    console.log(slotRefs[index].current?.getCurrentIcon());
-    console.log(slotRefs[index + 1].current?.getCurrentIcon());
     return numMatched;
   }
 
