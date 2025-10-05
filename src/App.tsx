@@ -28,9 +28,21 @@ const App = () => {
 
   const spin = () => {
     slotRefs.forEach((ref) => ref.current?.spin());
+    let numMatched: number;
+
     setTimeout(() => {
-      const numMatched = checkMatches(0);
-      console.log(numMatched);
+      for (let i = 0; i < slotNum - 1; i++) {
+        numMatched = checkMatches(i);
+        if (
+          numMatched === 1 &&
+          slotRefs[i + 1].current?.getCurrentIcon() !==
+            slotRefs[i].current?.getCurrentIcon()
+        ) {
+          continue;
+        } else {
+          break;
+        }
+      }
       win(numMatched);
       setCoinCount(numCoins);
     }, 3600);
