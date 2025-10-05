@@ -1,7 +1,7 @@
 import { motion, useMotionValue, animate } from "motion/react";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import Icon from "./Icon.tsx";
-import { getRandomIcon } from "../gameLogic.tsx";
+import { getRandomIcon, spendCoins, numCoins } from "../gameLogic.tsx";
 
 type IconData = {
   id: number;
@@ -28,10 +28,11 @@ const Slot = forwardRef<SlotRef>((_, ref) => {
   );
 
   const spin = async () => {
-    if (isSpinning.current) {
+    if (isSpinning.current || numCoins === 0) {
       return;
     }
     isSpinning.current = true;
+    spendCoins();
 
     for (let i = 0; i < 40; i++) {
       await animate(y, iconHeight, {

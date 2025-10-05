@@ -1,5 +1,6 @@
 const icons = ["7", "🎁", "🔔", "❤️", "♠️"];
-let numCoins = 500;
+export let numCoins = 500;
+const spinPrice = 50;
 
 export function shuffleIcons(): string[] {
   let curIndex = icons.length;
@@ -25,6 +26,10 @@ export function getRandomIcon() {
   } else {
     return "❓";
   }
+}
+
+export function spendCoins() {
+  numCoins -= spinPrice / 5;
 }
 
 export function win({ numMatch }: any) {
