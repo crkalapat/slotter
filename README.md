@@ -1,4 +1,4 @@
-!["Slotter Screenshot"](/src/assets/slotter_screenshot.png)
+<img src="/src/assets/slotter_screenshot.png" width="20">
 
 # Slotter
 
