@@ -32,14 +32,15 @@ export function spendCoins() {
   numCoins -= spinPrice / 5;
 }
 
-export function win({ numMatch }: any) {
+export function win(numMatch: number) {
+  console.log("win called");
   if (numMatch === 0 || numMatch === 1) {
     return;
   }
 
   switch (numMatch) {
     case 2:
-      numCoins += 200;
+      numCoins += 100;
       break;
     case 3:
       numCoins += 500;
@@ -51,4 +52,6 @@ export function win({ numMatch }: any) {
       numCoins += 2000;
       break;
   }
+  console.log(numMatch);
+  console.log(numCoins);
 }

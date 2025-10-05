@@ -10,6 +10,8 @@ type IconData = {
 
 export type SlotRef = {
   spin: () => void;
+  getCurrentIcon: () => string;
+  isSpinning: boolean;
 };
 
 const Slot = forwardRef<SlotRef>((_, ref) => {
@@ -55,10 +57,16 @@ const Slot = forwardRef<SlotRef>((_, ref) => {
 
   useImperativeHandle(ref, () => ({
     spin,
+    getCurrentIcon() {
+      return icons[2].icon;
+    },
+    get isSpinning() {
+      return isSpinning.current;
+    },
   }));
 
   return (
-    <div className="w-20 h-40 bg-yellow-50 rounded-xl overflow-hidden">
+    <div className="leading-0 inset-shadow-[0_0px_10px_rgba(0,0,0,0.4)] w-20 h-40 bg-yellow-50 rounded-xl overflow-hidden">
       <motion.div
         className="text-6xl flex flex-col mt-[-130px] items-center select-none translate-y-3"
         style={{ y }}
