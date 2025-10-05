@@ -1,4 +1,6 @@
-<img src="/src/assets/slotter_screenshot.png" width="20">
+<div style="display: flex; justify-content: center;">
+    <img src="/src/assets/slotter_screenshot.png" width="400">
+</div>
 
 # Slotter
 
