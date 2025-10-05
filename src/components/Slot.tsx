@@ -59,7 +59,7 @@ const Slot = forwardRef<SlotRef>((_, ref) => {
   return (
     <div className="w-20 h-40 bg-yellow-50 rounded-xl overflow-hidden">
       <motion.div
-        className="text-6xl flex flex-col mt-[-130px] items-center select-none translate-y-2"
+        className="text-6xl flex flex-col mt-[-130px] items-center select-none translate-y-3"
         style={{ y }}
       >
         {icons.map((icon) => (
