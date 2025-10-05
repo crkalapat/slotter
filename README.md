@@ -1,6 +1,6 @@
-<div style="display: flex; justify-content: center;">
+<p align="center">
     <img src="/src/assets/slotter_screenshot.png" width="400">
-</div>
+</p>
 
 # Slotter
 
